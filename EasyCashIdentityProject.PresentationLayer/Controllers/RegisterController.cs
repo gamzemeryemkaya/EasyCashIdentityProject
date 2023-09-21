@@ -25,7 +25,10 @@ namespace EasyCashIdentityProject.PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser appUser = new AppUser()
+				Random random = new Random();
+				int code;
+				code = random.Next(100000, 1000000);
+				AppUser appUser = new AppUser()
                 {
                     UserName = appUserRegisterDto.Username,
                     Name = appUserRegisterDto.Name,
@@ -34,6 +37,7 @@ namespace EasyCashIdentityProject.PresentationLayer.Controllers
 					City = "aaaa",
 					District = "bbbb",
 					ImageUrl = "cccc",
+					ConfirmCode = code
 				};
                 var result = await _userManager.CreateAsync(appUser, appUserRegisterDto.Password);
                 if (result.Succeeded)

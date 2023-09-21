@@ -2,7 +2,8 @@
 using EasyCashIdentityProject.EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace EasyCashIdentityProject.PresentationLayer.Controllers
 {
@@ -42,7 +43,23 @@ namespace EasyCashIdentityProject.PresentationLayer.Controllers
                 var result = await _userManager.CreateAsync(appUser, appUserRegisterDto.Password);
                 if (result.Succeeded)
                 {
+                    MimeMessage mimeMessage = new MimeMessage();
+                    MailboxAddress mailboxAddressFrom = new MailboxAddress("Easy Cash Admin", "demoprojectgamze@gmail.com");
+                    MailboxAddress mailboxAddressTo = new MailboxAddress("User", appUser.Email);
+                    mimeMessage.From.Add(mailboxAddressFrom);
+                    mimeMessage.To.Add(mailboxAddressTo);
 
+                    var bodyBuilder = new BodyBuilder();
+                    bodyBuilder.TextBody = "Kayıt işlemini gerçekleştirmek için onay kodunuz:" + code;
+                    mimeMessage.Body = bodyBuilder.ToMessageBody();
+
+                    mimeMessage.Subject = "Easy Cash Onay Kodu";
+
+                    SmtpClient client = new SmtpClient();
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("demoprojectgamze@gmail.com", "oagoaxuuficxxupd");
+                    client.Send(mimeMessage);
+                    client.Disconnect(true);
                     return RedirectToAction("Index", "ConfirmMail");
                 }
                 else

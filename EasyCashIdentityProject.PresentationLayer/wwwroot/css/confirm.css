@@ -1,0 +1,77 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Helvetica;
+}
+
+/* Sayfa arkaplanını beyaz yap */
+body {
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Form stil ayarları */
+form {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 60px;
+    margin: 12px auto;
+    border: 2px solid #222; /* Formun border rengini siyah yap */
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+    background-color: black; /* Form arkaplanını siyah yap */
+    color: white; /* Form yazı rengini beyaz yap */
+}
+
+    form > div {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        padding: 0 20px;
+        transform: translate(-50%,-50%);
+        background-color: black; /* Form içeriğinin arkaplanını siyah yap */
+        border: 2px solid #222; /* Form içeriğinin border rengini siyah yap */
+        border-radius: 20px;
+        text-align: center;
+    }
+
+        form > div > img {
+            filter: invert(1);
+            width: 100px;
+        }
+
+    form > input,
+    form > textarea {
+        padding: 12px;
+        margin: 12px auto;
+        border: 1px solid #222; /* Input ve textarea border rengini siyah yap */
+        color: white; /* Input ve textarea yazı rengini beyaz yap */
+        background-color: #fff; /* Input ve textarea arkaplanını beyaz yap */
+        border-radius: 4px;
+        display: block;
+        width: 70vw;
+    }
+
+    form > textarea {
+        height: 100px;
+        resize: none;
+    }
+
+    form > input[type="submit"] {
+        max-width: 20vw;
+        padding-left: 1%;
+        padding-right: 1%;
+        cursor: pointer;
+        transition: 0.35s;
+        background-color: #fff; /* Submit butonunun arkaplanını beyaz yap */
+        color: #222; /* Submit butonunun yazı rengini siyah yap */
+    }
+
+        form > input[type="submit"]:hover {
+            background-color: #555;
+        }

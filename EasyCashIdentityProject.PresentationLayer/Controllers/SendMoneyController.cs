@@ -17,6 +17,8 @@ namespace EasyCashIdentityProject.PresentationLayer.Controllers
             _customerAccountProcessService = customerAccountProcessService;
         }
 
+        //kullanıcının seçtiği para birimini belirlemek ve para transfer işlemlerini yönlendirmek için kullanılıyor
+        //bu para birimini view'da kullanılır. 
         [HttpGet]
         public IActionResult Index(string mycurrency)
         {
@@ -43,13 +45,22 @@ namespace EasyCashIdentityProject.PresentationLayer.Controllers
                 .Select(y => y.CustomerAccountID)
                 .FirstOrDefault();
 
+
+            // Bu satır, kullanıcının kimliği (user.Id) ile ilişkilendirilmiş müşteri hesaplarını filtreler.
+            var senderAccountNumberID = context.CustomerAccounts
+                .Where(x => x.AppUserID == user.Id) // Kullanıcının kimliği ile eşleşen müşteri hesaplarını seçer.
+                .Where(y => y.CustomerAccountCurrency == "Türk Lirası") // Para birimi "Türk Lirası" olanları filtreler.
+                .Select(z => z.CustomerAccountID) // Seçilen müşteri hesaplarının kimliklerini alır.
+                .FirstOrDefault(); // İlk eşleşen müşteri hesabının kimliğini alır veya varsayılan değeri kullanır.
+
             // 5. Para gönderme işlemi için bir nesne oluşturun ve verileri doldurun
             var values = new CustomerAccountProcess();
             values.ProcessDate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
             values.ProcessType = "Havale";
-            values.SenderID = user.Id;
+            values.SenderID = senderAccountNumberID;
             values.ReceiverID = receiverAccountNumberID;
             values.Amount = sendMoneyForCustomerAccountProcessDto.Amount;
+            values.Description = sendMoneyForCustomerAccountProcessDto.Description;
 
             // 6. İşlemi veritabanına kaydedin
             _customerAccountProcessService.TInsert(values);
